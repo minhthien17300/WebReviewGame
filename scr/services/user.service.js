@@ -61,63 +61,6 @@ exports.registerUserAsync = async body => {
 	}
 };
 
-exports.registerAdminAsync = async body => {
-	try {
-		const { userName, userPwd, name, email, phone, gender, dateofBirth } = body;
-		//kiểm tra xem đã có email trong database chưa
-		const emailExist = await USER.findOne({
-			email: email
-		});
-		if (emailExist)
-			return {
-				message: 'Email already exists',
-				success: false
-			};
-        //kiểm tra xem đã có username trong database chưa
-        const userExist = await USER.findOne({
-            userName: userName
-        });
-        if(userExist)
-            return {
-                message: "UserName already exists",
-                success: false
-            }
-        //bảo mật password
-		const hashedPassword = await bcrypt.hash(userPwd, 8);
-        //lưu user
-		const newUser = new USER({
-			userName: userName,
-			userPwd: hashedPassword,
-            name: name,
-            email: email,
-			phone: phone,
-			gender: gender,
-			dateofBirth: dateofBirth,
-		});
-		await newUser.save();
-		const generateToken = await jwtServices.createToken({
-			id: newUser._id,
-			role: newUser.role
-		});
-		return {
-			message: 'Successfully Register',
-			success: true,
-			data: generateToken,
-            userName: userName,
-			email: email,
-            role: defaultRoles.Admin
-		};
-	} catch (err) {
-		console.log(err);
-		return {
-			error: 'Internal Server',
-			success: false
-		};
-	}
-};
-
-
-
 exports.loginAsync = async body => {
 	try {
 		const { account, password } = body;
@@ -311,7 +254,7 @@ exports.resetPassword = async body => {
 			}
 		} else {
 			return {
-				message: 'Do not Email',
+				message: 'Wrong Email',
 				success: false
 			};
 		}

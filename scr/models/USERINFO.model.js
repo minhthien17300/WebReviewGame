@@ -11,6 +11,7 @@ const UserSchema = mongoose.Schema({
   gender: defaultModel.number,
   dateofBirth: defaultModel.date,
   role: defaultModel.number,
+  otp: defaultModel.string,
   isActive: defaultModel.boolean
 });
 
