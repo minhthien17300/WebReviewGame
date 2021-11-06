@@ -25,7 +25,7 @@ exports.registerUserAsync = async body => {
         });
         if(userExist)
             return {
-                message: "UserName already exists",
+                message: "Username already exists",
                 success: false
             }
         //bảo mật password
@@ -38,7 +38,7 @@ exports.registerUserAsync = async body => {
             email: email,
 			phone: phone,
 			gender: gender,
-			dateofBirth: dateofBirth,
+			dateofBirth: dateofBirth
 		});
 		await newUser.save();
 		const generateToken = await jwtServices.createToken({
@@ -46,11 +46,9 @@ exports.registerUserAsync = async body => {
 			role: newUser.role
 		});
 		return {
-			message: 'Successfully Register',
+			message: 'Success Register',
 			success: true,
-			data: generateToken,
-            userName: userName,
-			email: email
+			data: generateToken
 		};
 	} catch (err) {
 		console.log(err);
@@ -92,9 +90,7 @@ exports.loginAsync = async body => {
 		return {
 			message: 'Successfully login',
 			success: true,
-			data: {
-				token: generateToken
-			}
+			data: generateToken
 		};
 	} catch (err) {
 		console.log(err);
@@ -179,7 +175,7 @@ exports.fotgotPassword = async body => {
 			const mailOptions = {
 				to: result.email,
 				from: configEnv.Email,
-				subject: 'Quên mật khẩu Travel Around',
+				subject: 'Quên mật khẩu ReviewGame',
 				text: 'Mã OTP của bạn là: ' + result.otp
 			};
 			const resultSendMail = await sendMail(mailOptions);
@@ -216,7 +212,7 @@ exports.fotgotPassword = async body => {
 			}
 		} else {
 			return {
-				message: 'Do not email',
+				message: 'Wrong email',
 				success: false
 			};
 		}

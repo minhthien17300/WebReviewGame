@@ -23,7 +23,7 @@ exports.registerAsync = async (req, res, next) => {
 		const mailOptions = {
 			to: resServices.email,
 			from: configEnv.Email,
-			subject: 'Đăng ký tài khoản Reviewer thành công',
+			subject: 'Đăng ký tài khoản RevieweGame thành công!',
 			text: 'Chân thành cảm ơn bạn đã sử dụng trang Web, chúc bạn vui vẻ!'
 		};
 		smtpTransport.sendMail(mailOptions, function (error, response) {
