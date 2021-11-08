@@ -164,9 +164,10 @@ exports.changePasswordAsync = async (id, body) => {
 exports.fotgotPassword = async body => {
 	try {
 		const email = body.email;
-		var otp = await otpGenerator.generate(6, {
+		var otp = await otpGenerator.generate(5, {
 			upperCase: false,
-			specialChars: false
+			specialChars: false,
+			alphabets: false
 		});
 		const result = await USER.findOneAndUpdate({ email: email }, { otp: otp }, { new: true });
 		if (result != null) {
@@ -207,7 +208,6 @@ exports.resetPassword = async body => {
 	try {
 		const { email, password, confirmPassword, otp } = body;
 		let user = await USER.findOne({ email: email });
-		//const checkConfirm = await String.compare(password, confirmPassword);
 		if (user != null) {
 			if (password != confirmPassword) {
 				return {
@@ -218,9 +218,10 @@ exports.resetPassword = async body => {
 			}
 			if (otp == user.otp) {
 				const hashedPassword = await bcrypt.hash(password, 8);
-				const otp = otpGenerator.generate(6, {
+				const otp = otpGenerator.generate(5, {
 					upperCase: false,
-					specialChars: false
+					specialChars: false,
+					alphabets: false
 				});
 				user.userPwd = hashedPassword;
 				user.otp = otp;
