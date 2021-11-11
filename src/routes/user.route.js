@@ -12,6 +12,8 @@ router.post('/changePassword', jwtServices.verify, Validate.body(SchemaValidateU
 router.get('/forgotPassword', Controller.forgotPasswordAsync)
 router.post('/resetPassword', Validate.body(SchemaValidateUser.resetPassword), Controller.resetPasswordAsync)
 router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)
-
+router.post('/changeInfo', Validate.body(SchemaValidateUser.changeInfo), Controller.changeInfoAsync)
+router.post('/banUser', Controller.banUserAsync)
+router.post('/unbanUser', Controller.unbanUserAsync)
 
 module.exports = router

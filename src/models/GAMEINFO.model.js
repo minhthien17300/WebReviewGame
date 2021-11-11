@@ -5,8 +5,9 @@ const { defaultModel } = require('../config/defineModel');
 const GameSchema = mongoose.Schema({
   name: defaultModel.stringR,
   description: defaultModel.stringR,
+  types: defaultModel.array,
   score: defaultModel.number,
-  review: defaultModel.stringR
+  review: defaultModel.stringEvaluate
 });
 
 const Game = module.exports = mongoose.model('GAMEINFO', GameSchema, 'GAMEINFO');

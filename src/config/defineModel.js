@@ -11,6 +11,7 @@ const defaultModel = {
     booleanFalse: { type: Boolean, default: false },
     object: { type: Object, default: {} },
     stringImage: { type: String },
+    stringEvaluate: { type: String, default: "Unknown" },
   };
   const defaultRoles = {
     User: 0,

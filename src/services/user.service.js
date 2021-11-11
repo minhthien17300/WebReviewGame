@@ -10,7 +10,7 @@ const { string } = require('@hapi/joi');
 
 exports.registerUserAsync = async body => {
 	try {
-		const { userName, userPwd, name, email, phone, gender, dateofBirth } = body;
+		const { userName, userPwd, confirmPassword, name, email, phone, gender, dateofBirth } = body;
 		//kiểm tra xem đã có email trong database chưa
 		const emailExist = await USER.findOne({
 			email: email
@@ -29,6 +29,13 @@ exports.registerUserAsync = async body => {
                 message: "Tài khoản đã tồn tại! Hãy đăng nhập!",
                 success: false
             }
+		
+		if (userPwd != confirmPassword) {
+			return {
+				message: 'Nhập lại mật khẩu không khớp!',
+				success: false
+			};
+		};
         //mã hóa password
 		const hashedPassword = await bcrypt.hash(userPwd, 8);
         //lưu user
@@ -42,14 +49,9 @@ exports.registerUserAsync = async body => {
 			dateofBirth: dateofBirth
 		});
 		await newUser.save();
-		const generateToken = await jwtServices.createToken({
-			id: newUser._id,
-			role: newUser.role
-		});
 		return {
 			message: 'Đăng ký thành công',
 			success: true,
-			data: generateToken
 		};
 	} catch (err) {
 		console.log(err);
@@ -138,8 +140,8 @@ exports.changePasswordAsync = async (id, body) => {
 				data: user
 			};
 		}
-		const checkConfirm = await String.compare(newPassword, confirmPassword);
-		if(!checkConfirm){
+		
+		if(newPassword != confirmPassword){
 			return {
 				message: 'Nhập lại mật khẩu không khớp!',
 				success: false,
@@ -161,6 +163,7 @@ exports.changePasswordAsync = async (id, body) => {
 		};
 	}
 };
+
 exports.fotgotPassword = async body => {
 	try {
 		const email = body.email;
@@ -175,7 +178,9 @@ exports.fotgotPassword = async body => {
 				to: result.email,
 				from: configEnv.Email,
 				subject: 'Quên mật khẩu ReviewGame',
-				text: 'Mã OTP của bạn là: ' + result.otp
+				text:   'Có vẻ như bạn đã quên mật khẩu ReviewGame và muốn lấy lại\n'+
+						'Mã OTP của bạn là: ' + result.otp + '\n'+
+						'Nếu đó không phải là yêu cầu của bạn vui lòng bỏ qua eamil này!'
 			};
 			const resultSendMail = await sendMail(mailOptions);
 			console.log(resultSendMail);
@@ -186,13 +191,13 @@ exports.fotgotPassword = async body => {
 				};
 			} else {
 				return {
-					message: 'Gửi mail thành công!',
+					message: 'Gửi mail thành công! Vui lòng kiểm tra email để nhận mã otp!',
 					success: true
 				};
 			}
 		} else {
 			return {
-				message: 'Sai email đăng nhập',
+				message: 'Vui lòng kiểm tra email nhập vào!',
 				success: false
 			};
 		}
@@ -214,17 +219,12 @@ exports.resetPassword = async body => {
 					message: 'Nhập lại mật khẩu không khớp!',
 					success: false,
 					data: user
-				}
-			}
+				};
+			};
 			if (otp == user.otp) {
 				const hashedPassword = await bcrypt.hash(password, 8);
-				const otp = otpGenerator.generate(5, {
-					upperCase: false,
-					specialChars: false,
-					alphabets: false
-				});
 				user.userPwd = hashedPassword;
-				user.otp = otp;
+				user.otp = "";
 				user.save();
 				return {
 					message: 'Đổi mật khẩu thành công!',
@@ -250,10 +250,10 @@ exports.resetPassword = async body => {
 	}
 };
 
-exports._findAdminByRoleAsync = async () => {
+exports._findUserByRoleAsync = async () => {
 	try {
-		const user = await ACCOUNT.findOne({
-			role: 1
+		const user = await USER.findOne({
+			role: 0
 		});
 		return user;
 	} catch (err) {
@@ -262,14 +262,93 @@ exports._findAdminByRoleAsync = async () => {
 	}
 };
 
-exports._findUserByRoleAsync = async () => {
+exports.changeInfoAsync = async (id, body) => {
 	try {
-		const user = await ACCOUNT.findOne({
-			role: 0
-		});
-		return user;
-	} catch (err) {
-		console.log(err);
-		return null;
+		const { name, email, phone, gender, dateofBirth } = body;
+		const user = USER.findOneAndUpdate(
+			{ _id: id },
+			{ 
+				name: name,
+				email: email,
+				phone: phone,
+				gender: gender,
+				dateofBirth: dateofBirth
+			},
+			{ new: true }
+		);
+		if (user != null) {
+			return {
+			message: 'Đổi thông tin thành công!',
+			success: true
+			};
+		}
+		else {
+			return {
+				message: "Đổi thông tin không thành công!",
+				success: false
+			};
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'Oops! Có lỗi xảy ra!',
+			success: false
+		};
+	}
+};
+
+exports.banUserAsync = async (id) => {
+	try {
+		const user = USER.findOneAndUpdate(
+			{ _id: id },
+			{ isActive: false },
+			{ new: true }
+		);
+		if (user != null) {
+			return {
+			message: 'Khóa tài khoản thành công!',
+			success: true
+			};
+		}
+		else {
+			return {
+				message: "Khóa tài khoản không thành công!",
+				success: false
+			};
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'Oops! Có lỗi xảy ra!',
+			success: false
+		};
+	}
+};
+
+exports.unbanUserAsync = async (id) => {
+	try {
+		const user = USER.findOneAndUpdate(
+			{ _id: id },
+			{ isActive: true },
+			{ new: true }
+		);
+		if (user != null) {
+			return {
+			message: 'Mở khóa tài khoản thành công!',
+			success: true
+			};
+		}
+		else {
+			return {
+				message: "Mở khóa tài khoản không thành công!",
+				success: false
+			};
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'Oops! Có lỗi xảy ra!',
+			success: false
+		};
 	}
 };

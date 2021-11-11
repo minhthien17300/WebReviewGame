@@ -1,6 +1,6 @@
 const userServices = require('../services/user.service');
-const { defaultRoles } = require('../config/defineModel');
-const jwtServices = require('../services/jwt.service');
+//const { defaultRoles } = require('../config/defineModel');
+//const jwtServices = require('../services/jwt.service');
 const { configEnv } = require('../config/config');
 const nodemailer = require('nodemailer');
 const controller = require("./message.controller");
@@ -23,7 +23,7 @@ exports.registerAsync = async (req, res, next) => {
 		const mailOptions = {
 			to: resServices.email,
 			from: configEnv.Email,
-			subject: 'Đăng ký tài khoản RevieweGame thành công!',
+			subject: 'Đăng ký tài khoản ReviewGame thành công!',
 			text: 'Chân thành cảm ơn bạn đã sử dụng trang Web, chúc bạn vui vẻ!'
 		};
 		smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -31,14 +31,14 @@ exports.registerAsync = async (req, res, next) => {
 				return controller.sendSuccess(
 					res,
 					resServices.data,
-					300,
+					400,
 					resServices.message
 				);
 			} else {
 				controller.sendSuccess(
 					res,
 					resServices.data,
-					200,
+					201,
 					resServices.message
 				);
 			}
@@ -54,7 +54,7 @@ exports.loginAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.loginAsync(req.value.body);
 		if (!resServices.success) {
-			return controller.sendSuccess(res, {}, 300, resServices.message);
+			return controller.sendSuccess(res, {}, 400, resServices.message);
 		}
 		return controller.sendSuccess(
 			res,
@@ -76,7 +76,7 @@ exports.forgotPasswordAsync = async (req, res, next) => {
 			return controller.sendSuccess(
 				res,
 				resServices.success,
-				300,
+				400,
 				resServices.message
 			);
 		}
@@ -98,7 +98,7 @@ exports.resetPasswordAsync = async (req, res, next) => {
 			return controller.sendSuccess(
 				res,
 				resServices.success,
-				300,
+				400,
 				resServices.message
 			);
 		}
@@ -123,7 +123,7 @@ exports.findUserByTokenAsync = async (req, res, next) => {
 		return controller.sendSuccess(
 			res,
 			resServices.data,
-			200,
+			302,
 			resServices.message
 		);
 	} catch (error) {
@@ -142,7 +142,79 @@ exports.changePasswordAsync = async (req, res, next) => {
 			return controller.sendSuccess(
 				res,
 				resServices.success,
-				300,
+				400,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.success,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		return controller.sendError(res);
+	}
+};
+
+exports.changeInfoAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+		const resServices = await userServices.changeInfoAsync(id, req.value.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				400,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.success,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		return controller.sendError(res);
+	}
+};
+
+exports.banUserAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+		const resServices = await userServices.banUserAsync(id);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				418,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.success,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		return controller.sendError(res);
+	}
+};
+
+exports.unbanUserAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+		const resServices = await userServices.unbanUserAsync(id);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				418,
 				resServices.message
 			);
 		}
