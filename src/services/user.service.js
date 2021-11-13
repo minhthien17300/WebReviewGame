@@ -265,7 +265,7 @@ exports._findUserByRoleAsync = async () => {
 exports.changeInfoAsync = async (id, body) => {
 	try {
 		const { name, email, phone, gender, dateofBirth } = body;
-		const user = USER.findOneAndUpdate(
+		const user = await USER.findOneAndUpdate(
 			{ _id: id },
 			{ 
 				name: name,
@@ -299,7 +299,7 @@ exports.changeInfoAsync = async (id, body) => {
 
 exports.banUserAsync = async (id) => {
 	try {
-		const user = USER.findOneAndUpdate(
+		const user = await USER.findOneAndUpdate(
 			{ _id: id },
 			{ isActive: false },
 			{ new: true }
@@ -327,7 +327,7 @@ exports.banUserAsync = async (id) => {
 
 exports.unbanUserAsync = async (id) => {
 	try {
-		const user = USER.findOneAndUpdate(
+		const user = await USER.findOneAndUpdate(
 			{ _id: id },
 			{ isActive: true },
 			{ new: true }

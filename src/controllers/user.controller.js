@@ -1,6 +1,6 @@
 const userServices = require('../services/user.service');
 //const { defaultRoles } = require('../config/defineModel');
-//const jwtServices = require('../services/jwt.service');
+const jwtServices = require('../services/jwt.service');
 const { configEnv } = require('../config/config');
 const nodemailer = require('nodemailer');
 const controller = require("./message.controller");
@@ -183,8 +183,7 @@ exports.changeInfoAsync = async (req, res, next) => {
 
 exports.banUserAsync = async (req, res, next) => {
 	try {
-		const { decodeToken } = req.value.body;
-		const id = decodeToken.data.id;
+		const id = req.body.id;
 		const resServices = await userServices.banUserAsync(id);
 		if (!resServices.success) {
 			return controller.sendSuccess(
@@ -207,8 +206,7 @@ exports.banUserAsync = async (req, res, next) => {
 
 exports.unbanUserAsync = async (req, res, next) => {
 	try {
-		const { decodeToken } = req.value.body;
-		const id = decodeToken.data.id;
+		const id = req.body.id;
 		const resServices = await userServices.unbanUserAsync(id);
 		if (!resServices.success) {
 			return controller.sendSuccess(

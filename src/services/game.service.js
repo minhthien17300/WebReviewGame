@@ -33,9 +33,9 @@ exports.addGameAsync = async body => {
 	}
 };
 
-exports.editGameAsync = async ( id, body ) => {
+exports.editGameAsync = async ( body ) => {
     try {
-        const { name, description, types } = body;
+        const { id, name, description, types } = body;
         const game = await GAME.findOneAndUpdate(
 			{ _id: id },
 			{ 
@@ -66,11 +66,10 @@ exports.editGameAsync = async ( id, body ) => {
 
 exports.deleteGameAsync = async (id) => {
     try {
-        const game = await GAME.delete({ _id: id });
+        const game = await GAME.deleteOne({ _id: id });
 		return {
             message: "Xóa thành công!",
             success: true,
-            data: game
         }
     } catch (err) {
 		console.log(err);

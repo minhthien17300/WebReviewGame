@@ -39,7 +39,7 @@ exports.editGameAsync = async (req, res, next) => {
 
 exports.deleteGameAsync = async (req, res, next) => {
 	try {
-		const resServices = await gameServices.deleteGameAsync();
+		const resServices = await gameServices.deleteGameAsync(req.body.id);
 		if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 500, resServices.message);
 		}
@@ -92,7 +92,7 @@ exports.getALLGameAsync = async (req, res, next) =>{
 
 exports.getGameDetailAsync = async (req, res, next) => {
 	try {
-        const resServices = await gameServices.getGameDetailAsync(req.body);
+        const resServices = await gameServices.getGameDetailAsync(req.body.id);
         if(resServices == null) {
             return controller.sendSuccess(res, {}, 404, "Oops! Có lỗi xảy ra!");
 		}
