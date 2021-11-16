@@ -301,7 +301,7 @@ exports.banUserAsync = async (id) => {
 	try {
 		const user = await USER.findOneAndUpdate(
 			{ _id: id },
-			{ isActive: false },
+			{ isActived: false },
 			{ new: true }
 		);
 		if (user != null) {
@@ -329,7 +329,7 @@ exports.unbanUserAsync = async (id) => {
 	try {
 		const user = await USER.findOneAndUpdate(
 			{ _id: id },
-			{ isActive: true },
+			{ isActived: true },
 			{ new: true }
 		);
 		if (user != null) {

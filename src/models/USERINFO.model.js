@@ -12,7 +12,8 @@ const UserSchema = mongoose.Schema({
   dateofBirth: defaultModel.date,
   role: defaultModel.number,
   otp: defaultModel.string,
-  isActive: defaultModel.boolean
+  isWarned: defaultModel.number,
+  isActived: defaultModel.boolean
 });
 
 const User = module.exports = mongoose.model('USERINFO', UserSchema, 'USERINFO');

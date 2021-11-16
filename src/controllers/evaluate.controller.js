@@ -21,3 +21,99 @@ exports.addEvaluateAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 }
+
+exports.editEvaluateAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+        const resServices = await evaluateServices.editEvaluateAsync(id, req.value.body);
+        if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 400, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
+
+exports.deleteEvaluateAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+        const resServices = await evaluateServices.deleteEvaluateAsync(id, req.body.gID);
+        if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 400, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
+
+exports.getEvaluateOfGameAsync = async (req, res, next) => {
+	try {
+        const resServices = await evaluateServices.getEvaluateOfGameAsync(req.body.gID);
+        if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 404, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
+
+exports.getUserEvaluateAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+        const resServices = await evaluateServices.getUserEvaluateAsync(id, req.body.gID);
+        if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 404, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
+
+exports.evaluateFilterAsync = async (req, res, next) => {
+	try {
+        const resServices = await evaluateServices.evaluateFilterAsync(req.value.body);
+        if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 404, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
