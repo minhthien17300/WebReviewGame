@@ -3,7 +3,7 @@ const controller = require('./message.controller');
 
 exports.addGameAsync = async (req, res, next) => {
     try {
-        const resServices = await gameServices.addGameAsync(req.value.body);
+        const resServices = await gameServices.addGameAsync(req.value.body, req.files["images"]);
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 400, resServices.message);
 		}
@@ -21,7 +21,7 @@ exports.addGameAsync = async (req, res, next) => {
 
 exports.editGameAsync = async (req, res, next) => {
 	try {
-		const resServices = await gameServices.editGameAsync(req.value.body);
+		const resServices = await gameServices.editGameAsync(req.value.body, req.files["images"]);
 		if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 400, resServices.message);
 		}

@@ -2,8 +2,9 @@ const GAME = require("../models/GAMEINFO.model");
 const { string, array } = require('@hapi/joi');
 const { $where } = require("../models/GAMEINFO.model");
 const { query } = require("express");
+const uploadImageHelper = require('../helper/uploadImage.helper');
 
-exports.addGameAsync = async body => {
+exports.addGameAsync = async (body, images) => {
     try {
         const { name, description, types } = body;
         const gameExist = await GAME.findOne({ 
@@ -16,10 +17,13 @@ exports.addGameAsync = async body => {
             };
         };
 
+        const urlList = await uploadImageHelper.uploadImageAsync(images, name);
+
         const newGame = new GAME({
             name: name,
             description: description,
-            types: types
+            types: types,
+            images: urlList
         });
         await newGame.save();
         return {
@@ -33,15 +37,20 @@ exports.addGameAsync = async body => {
 	}
 };
 
-exports.editGameAsync = async ( body ) => {
+exports.editGameAsync = async ( body, images ) => {
     try {
         const { id, name, description, types } = body;
+        const urlList = await uploadImageHelper.uploadImageAsync(images, name);
+        const tempGame = await GAME.findById({ _id: id });
+        let tempUrls = tempGame.images;
+        let urls = tempUrls.concat(urlList);
         const game = await GAME.findOneAndUpdate(
 			{ _id: id },
 			{ 
 				name: name,
 				description: description,
-				types: types
+				types: types,
+                images: urls
 			},
 			{ new: true }
 		);

@@ -6,6 +6,7 @@ const GameSchema = mongoose.Schema({
   name: defaultModel.stringR,
   description: defaultModel.stringR,
   types: defaultModel.array,
+  images: defaultModel.array,
   score: defaultModel.number,
   review: defaultModel.stringEvaluate
 });
