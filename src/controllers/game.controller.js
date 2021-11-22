@@ -1,8 +1,20 @@
 const gameServices = require('../services/game.service');
 const controller = require('./message.controller');
+const verifyUserHelper = require('../helper/verifyUser.helper');
 
 exports.addGameAsync = async (req, res, next) => {
     try {
+		const { decodeToken } = req.value.body;
+		const aID = decodeToken.data.id;
+		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
+		if (!checkAdmin) {
+			return controller.sendSuccess(
+				res,
+				{},
+				400,
+				"Bạn không có quyền truy cập tính năng này!"
+			);
+		}
         const resServices = await gameServices.addGameAsync(req.value.body, req.files["images"]);
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 400, resServices.message);
@@ -21,6 +33,17 @@ exports.addGameAsync = async (req, res, next) => {
 
 exports.editGameAsync = async (req, res, next) => {
 	try {
+		const { decodeToken } = req.value.body;
+		const aID = decodeToken.data.id;
+		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
+		if (!checkAdmin) {
+			return controller.sendSuccess(
+				res,
+				{},
+				400,
+				"Bạn không có quyền truy cập tính năng này!"
+			);
+		}
 		const resServices = await gameServices.editGameAsync(req.value.body, req.files["images"]);
 		if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 400, resServices.message);
@@ -39,6 +62,17 @@ exports.editGameAsync = async (req, res, next) => {
 
 exports.deleteGameAsync = async (req, res, next) => {
 	try {
+		const { decodeToken } = req.value.body;
+		const aID = decodeToken.data.id;
+		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
+		if (!checkAdmin) {
+			return controller.sendSuccess(
+				res,
+				{},
+				400,
+				"Bạn không có quyền truy cập tính năng này!"
+			);
+		}
 		const resServices = await gameServices.deleteGameAsync(req.body.id);
 		if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 500, resServices.message);

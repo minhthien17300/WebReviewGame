@@ -4,6 +4,7 @@ const jwtServices = require('../services/jwt.service');
 const { configEnv } = require('../config/config');
 const nodemailer = require('nodemailer');
 const controller = require("./message.controller");
+const verifyUserHelper = require('../helper/verifyUser.helper')
 
 exports.registerAsync = async (req, res, next) => {
 	try {
@@ -71,7 +72,7 @@ exports.loginAsync = async (req, res, next) => {
 exports.forgotPasswordAsync = async (req, res, next) => {
 	try {
 		const { email } = req.body;
-		const resServices = await userServices.fotgotPassword({ email: email });
+		const resServices = await userServices.fotgotPasswordAsync({ email: email });
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -93,7 +94,7 @@ exports.forgotPasswordAsync = async (req, res, next) => {
 };
 exports.resetPasswordAsync = async (req, res, next) => {
 	try {
-		const resServices = await userServices.resetPassword(req.value.body);
+		const resServices = await userServices.resetPasswordAsync(req.value.body);
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -183,6 +184,17 @@ exports.changeInfoAsync = async (req, res, next) => {
 
 exports.banUserAsync = async (req, res, next) => {
 	try {
+		const { decodeToken } = req.value.body;
+		const aID = decodeToken.data.id;
+		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
+		if (!checkAdmin) {
+			return controller.sendSuccess(
+				res,
+				{},
+				400,
+				"Bạn không có quyền truy cập tính năng này!"
+			);
+		}
 		const id = req.body.id;
 		const resServices = await userServices.banUserAsync(id);
 		if (!resServices.success) {
@@ -206,6 +218,17 @@ exports.banUserAsync = async (req, res, next) => {
 
 exports.unbanUserAsync = async (req, res, next) => {
 	try {
+		const { decodeToken } = req.value.body;
+		const aID = decodeToken.data.id;
+		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
+		if (!checkAdmin) {
+			return controller.sendSuccess(
+				res,
+				{},
+				400,
+				"Bạn không có quyền truy cập tính năng này!"
+			);
+		}
 		const id = req.body.id;
 		const resServices = await userServices.unbanUserAsync(id);
 		if (!resServices.success) {

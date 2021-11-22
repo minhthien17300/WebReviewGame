@@ -52,6 +52,7 @@ exports.registerUserAsync = async body => {
 		return {
 			message: 'Đăng ký thành công',
 			success: true,
+			email: email
 		};
 	} catch (err) {
 		console.log(err);
@@ -164,7 +165,7 @@ exports.changePasswordAsync = async (id, body) => {
 	}
 };
 
-exports.fotgotPassword = async body => {
+exports.fotgotPasswordAsync = async body => {
 	try {
 		const email = body.email;
 		var otp = await otpGenerator.generate(5, {
@@ -209,7 +210,7 @@ exports.fotgotPassword = async body => {
 		};
 	}
 };
-exports.resetPassword = async body => {
+exports.resetPasswordAsync = async body => {
 	try {
 		const { email, password, confirmPassword, otp } = body;
 		let user = await USER.findOne({ email: email });
