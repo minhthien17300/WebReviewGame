@@ -4,6 +4,8 @@ const SchemaValidateGame = require("../validators/game.validator")
 const router = express.Router()
 const Validate = require("../validators")
 const jwtServices = require("../services/jwt.service")
+const verifyUserHelper = require('../helper/verifyUser.helper');
+const { defaultRoles } = require('../config/defineModel');
 const path = require("path");
 var multer = require("multer");
 const storage = multer.diskStorage({
@@ -17,9 +19,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 var cpUpload = upload.fields([{ name: 'images', maxCount: 100 }]);
 
-router.post('/addGame', jwtServices.verify, cpUpload, Validate.body(SchemaValidateGame.addGame), Controller.addGameAsync)
-router.post('/editGame', jwtServices.verify, cpUpload, Validate.body(SchemaValidateGame.editGame), Controller.editGameAsync)
-router.post('/deleteGame', jwtServices.verify, Controller.deleteGameAsync)
+router.post('/addGame', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), cpUpload, Validate.body(SchemaValidateGame.addGame), Controller.addGameAsync)
+router.post('/editGame', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), cpUpload, Validate.body(SchemaValidateGame.editGame), Controller.editGameAsync)
+router.post('/deleteGame', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.deleteGameAsync)
 router.get('/findGameByType', Validate.body(SchemaValidateGame.findGameByType), Controller.findGameByTypeAsync)
 router.get('/getALLGame', Controller.getALLGameAsync)
 router.get('/getGameDetail', Controller.getGameDetailAsync)

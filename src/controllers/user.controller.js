@@ -4,7 +4,6 @@ const jwtServices = require('../services/jwt.service');
 const { configEnv } = require('../config/config');
 const nodemailer = require('nodemailer');
 const controller = require("./message.controller");
-const verifyUserHelper = require('../helper/verifyUser.helper')
 
 exports.registerAsync = async (req, res, next) => {
 	try {
@@ -184,17 +183,6 @@ exports.changeInfoAsync = async (req, res, next) => {
 
 exports.banUserAsync = async (req, res, next) => {
 	try {
-		const { decodeToken } = req.value.body;
-		const aID = decodeToken.data.id;
-		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
-		if (!checkAdmin) {
-			return controller.sendSuccess(
-				res,
-				{},
-				400,
-				"Bạn không có quyền truy cập tính năng này!"
-			);
-		}
 		const id = req.body.id;
 		const resServices = await userServices.banUserAsync(id);
 		if (!resServices.success) {
@@ -218,17 +206,6 @@ exports.banUserAsync = async (req, res, next) => {
 
 exports.unbanUserAsync = async (req, res, next) => {
 	try {
-		const { decodeToken } = req.value.body;
-		const aID = decodeToken.data.id;
-		const checkAdmin = await verifyUserHelper.checkAdminAsync(aID);
-		if (!checkAdmin) {
-			return controller.sendSuccess(
-				res,
-				{},
-				400,
-				"Bạn không có quyền truy cập tính năng này!"
-			);
-		}
 		const id = req.body.id;
 		const resServices = await userServices.unbanUserAsync(id);
 		if (!resServices.success) {
