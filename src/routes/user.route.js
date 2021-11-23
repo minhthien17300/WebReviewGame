@@ -17,5 +17,7 @@ router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsy
 router.post('/changeInfo', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.User]), Validate.body(SchemaValidateUser.changeInfo), Controller.changeInfoAsync)
 router.post('/banUser', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.banUserAsync)
 router.post('/unbanUser', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.unbanUserAsync)
+router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)
+router.get('/getALLUser', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.getALLUserAsync)
 
 module.exports = router

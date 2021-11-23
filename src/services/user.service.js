@@ -353,3 +353,28 @@ exports.unbanUserAsync = async (id) => {
 		};
 	}
 };
+
+exports.getALLUserAsync = async () => {
+	try {
+		const users = await USER.find({ role: 0 });
+		if (users.length == 0) {
+			return {
+				message: "Không có user trong hệ thống!",
+				data: {},
+				success: false
+			}
+		} else {
+			return {
+				message: "Danh sách User",
+				data: users,
+				success: true
+			}
+		}
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'Oops! Có lỗi xảy ra!',
+			success: false
+		};
+	}
+}

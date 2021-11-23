@@ -226,3 +226,28 @@ exports.unbanUserAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
+exports.getALLUserAsync = async (req, res, next) => {
+	try {
+		const resServices = await userServices.getALLUserAsync();
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				400,
+				resServices.message
+			);
+		} else {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				302,
+				resServices.message
+			);
+		}
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
