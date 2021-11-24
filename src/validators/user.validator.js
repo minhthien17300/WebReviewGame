@@ -6,7 +6,7 @@ const schemas = {
 		confirmPassword: joi.string().required(),
 		name: joi.string().required(),
 		email: joi.string().email().required(),
-		phone: joi.string().required(),
+		phone: joi.string().length(10).pattern(/^[0-9]+$/).required(),
 		gender: joi.number(),
 		dateofBirth: joi.date()
 	}),
@@ -28,7 +28,7 @@ const schemas = {
 	changeInfo: joi.object().keys({
 		name: joi.string().required(),
 		email: joi.string().email().required(),
-		phone: joi.string().required(),
+		phone: joi.string().length(10).pattern(/^[0-9]+$/).required(),
 		gender: joi.number(),
 		dateofBirth: joi.date()
 	}),
