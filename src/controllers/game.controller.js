@@ -57,7 +57,7 @@ exports.deleteGameAsync = async (req, res, next) => {
 
 exports.findGameByTypeAsync = async (req, res, next) =>{
     try {
-        const resServices = await gameServices.findGameByTypeAsync(req.value.body);
+        const resServices = await gameServices.findGameByTypeAsync(req.query.types);
         if(!resServices.success) {
             return controller.sendSuccess(res, {}, 404, resServices.message);
 		}
@@ -92,7 +92,7 @@ exports.getALLGameAsync = async (req, res, next) =>{
 
 exports.getGameDetailAsync = async (req, res, next) => {
 	try {
-        const resServices = await gameServices.getGameDetailAsync(req.body.id);
+        const resServices = await gameServices.getGameDetailAsync(req.query.id);
         if(resServices == null) {
             return controller.sendSuccess(res, {}, 404, "Oops! Có lỗi xảy ra!");
 		}
@@ -109,7 +109,7 @@ exports.getGameDetailAsync = async (req, res, next) => {
 
 exports.findGameByNameAsync = async (req, res, next) => {
 	try {
-        const resServices = await gameServices.findGameByNameAsync(req.value.body);
+        const resServices = await gameServices.findGameByNameAsync(req.query.name);
         if(!resServices.success) {
             return controller.sendSuccess(res, {}, 404, resServices.message);
 		}

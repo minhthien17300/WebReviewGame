@@ -64,7 +64,7 @@ exports.deleteEvaluateAsync = async (req, res, next) => {
 
 exports.getEvaluateOfGameAsync = async (req, res, next) => {
 	try {
-        const resServices = await evaluateServices.getEvaluateOfGameAsync(req.body.gID);
+        const resServices = await evaluateServices.getEvaluateOfGameAsync(req.query.gID);
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 404, resServices.message);
 		}
@@ -84,7 +84,7 @@ exports.getUserEvaluateAsync = async (req, res, next) => {
 	try {
 		const { decodeToken } = req.value.body;
 		const id = decodeToken.data.id;
-        const resServices = await evaluateServices.getUserEvaluateAsync(id, req.body.gID);
+        const resServices = await evaluateServices.getUserEvaluateAsync(id, req.query.gID);
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 404, resServices.message);
 		}
@@ -102,7 +102,11 @@ exports.getUserEvaluateAsync = async (req, res, next) => {
 
 exports.evaluateFilterAsync = async (req, res, next) => {
 	try {
-        const resServices = await evaluateServices.evaluateFilterAsync(req.value.body);
+		let body = {
+			gID: req.query.gID,
+			scores: req.query.scores,
+		};
+        const resServices = await evaluateServices.evaluateFilterAsync(body);
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 404, resServices.message);
 		}

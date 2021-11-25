@@ -4,6 +4,7 @@ const { defaultModel } = require('../config/defineModel');
 // Game Schema
 const GameSchema = mongoose.Schema({
   name: defaultModel.stringR,
+  publisher: defaultModel.stringR,
   description: defaultModel.stringR,
   types: defaultModel.array,
   images: defaultModel.array,

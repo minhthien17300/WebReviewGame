@@ -6,7 +6,7 @@ const uploadImageHelper = require('../helper/uploadImage.helper');
 
 exports.addGameAsync = async (body, images) => {
     try {
-        const { name, description, types } = body;
+        const { name, publisher, description, types } = body;
         const gameExist = await GAME.findOne({ 
             name: name 
         });
@@ -21,6 +21,7 @@ exports.addGameAsync = async (body, images) => {
 
         const newGame = new GAME({
             name: name,
+            publisher: publisher,
             description: description,
             types: types,
             images: urlList
@@ -39,7 +40,7 @@ exports.addGameAsync = async (body, images) => {
 
 exports.editGameAsync = async ( body, images ) => {
     try {
-        const { id, name, description, types } = body;
+        const { id, name, publisher, description, types } = body;
         const urlList = await uploadImageHelper.uploadImageAsync(images, name);
         const tempGame = await GAME.findById({ _id: id });
         let tempUrls = tempGame.images;
@@ -48,6 +49,7 @@ exports.editGameAsync = async ( body, images ) => {
 			{ _id: id },
 			{ 
 				name: name,
+                publisher: publisher,
 				description: description,
 				types: types,
                 images: urls
@@ -89,9 +91,8 @@ exports.deleteGameAsync = async (id) => {
 	}
 }
 
-exports.findGameByTypeAsync = async body => {
+exports.findGameByTypeAsync = async types => {
     try {
-        const { types } = body;
         const games = await GAME.find({
             types: { $in: types }
         });
@@ -133,9 +134,8 @@ exports.getGameDetailAsync = async (id) => {
 	}
 }
 
-exports.findGameByNameAsync = async body => {
+exports.findGameByNameAsync = async name => {
     try {
-        const { name } = body;
         var nameRegex = new RegExp(name)
         const games = await GAME.find({name :{$regex: nameRegex, $options: 'i'}});
         if(games.length == 0) {
