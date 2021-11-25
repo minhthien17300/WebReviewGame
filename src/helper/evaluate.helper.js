@@ -67,3 +67,13 @@ exports.autoBanUserAsync = async (uID) => {
 		return controller.sendError(res);
 	}
 }
+
+exports.getUserNameByIdAsync = async (uID) => {
+    try {
+        const user = await USER.findById({ _id: uID });
+        return user.name;
+    } catch (err) {
+		console.log(err);
+		return "";
+	}
+}
