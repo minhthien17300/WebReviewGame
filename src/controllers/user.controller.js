@@ -183,7 +183,7 @@ exports.changeInfoAsync = async (req, res, next) => {
 
 exports.banUserAsync = async (req, res, next) => {
 	try {
-		const id = req.query.id;
+		const id = req.body.id;
 		const resServices = await userServices.banUserAsync(id);
 		if (!resServices.success) {
 			return controller.sendSuccess(
@@ -206,7 +206,7 @@ exports.banUserAsync = async (req, res, next) => {
 
 exports.unbanUserAsync = async (req, res, next) => {
 	try {
-		const id = req.query.id;
+		const id = req.body.id;
 		const resServices = await userServices.unbanUserAsync(id);
 		if (!resServices.success) {
 			return controller.sendSuccess(
