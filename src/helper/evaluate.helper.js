@@ -23,16 +23,16 @@ exports.scoreCalculatorAsync = async (gID) => {
                 score = score + evaluate.score;
             }
             avgScore = score/evaluates.length;
-            if (avgScore <= 1) {
+            if (avgScore <= 2) {
                 review = defaultGameStatus.VeryNegative;
             }
-            else if (avgScore <=2) {
+            else if (avgScore <=4) {
                 review = defaultGameStatus.Negative;
             }
-            else if (avgScore <=3) {
+            else if (avgScore <=6) {
                 review = defaultGameStatus.Mixed;
             }
-            else if (avgScore <=4) {
+            else if (avgScore <=8) {
                 review = defaultGameStatus.Positive;
             }
             else {

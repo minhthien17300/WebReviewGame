@@ -124,3 +124,20 @@ exports.findGameByNameAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 }
+
+exports.getGameSortAsync = async (req, res, next) =>{
+    try {
+        const resServices = await gameServices.getGameSortAsync();
+        if(resServices == null) {
+            return controller.sendSuccess(res, {}, 404, "Oops! Có lỗi xảy ra!");
+		}
+		return controller.sendSuccess(
+			res,
+			resServices,
+			302
+		);
+    } catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+}

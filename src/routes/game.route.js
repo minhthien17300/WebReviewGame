@@ -26,5 +26,7 @@ router.get('/findGameByType', Validate.body(SchemaValidateGame.findGameByType), 
 router.get('/getALLGame', Controller.getALLGameAsync)
 router.get('/getGameDetail', Controller.getGameDetailAsync)
 router.get('/findGameByName', Validate.body(SchemaValidateGame.findGameByName), Controller.findGameByNameAsync)
+router.get('/getGameSort', Controller.getGameSortAsync)
+
 
 module.exports = router

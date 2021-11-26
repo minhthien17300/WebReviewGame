@@ -155,3 +155,13 @@ exports.findGameByNameAsync = async name => {
 		return null;
 	}
 }
+
+exports.getGameSortAsync = async () => {
+    try {
+        const games = await GAME.find().sort({score: -1});
+        return games;
+    } catch (err) {
+		console.log(err);
+		return null;
+	}
+};
