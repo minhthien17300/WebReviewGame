@@ -74,14 +74,22 @@ exports.loginAsync = async body => {
 		});
 		if (!user) {
 			return {
-				message: 'Sai tài khoản hoặc email đăng nhập!',
+				message: 'Sai tài khoản, email đăng nhập hoặc mật khẩu!',
 				success: false
 			};
 		}
+
+		if (!user.isActived) {
+			return {
+				message: 'Tài khoản của bạn đã bị khóa, hãy liên hệ email: phamduylap123456@gmail.com để trình bày!',
+				success: false
+			}
+		}
+
 		const checkPassword = await bcrypt.compare(userPwd, user.userPwd);
 		if (!checkPassword) {
 			return {
-				message: 'Sai mật khẩu!',
+				message: 'Sai tài khoản, email đăng nhập hoặc mật khẩu!',
 				success: false
 			};
 		}
