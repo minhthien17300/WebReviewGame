@@ -3,7 +3,7 @@ const controller = require('./message.controller');
 
 exports.getALLTypeAsync = async (req, res, next) => {
     try {
-        const resServices = await typeServices.getALLTypeAsync(req.body.id);
+        const resServices = await typeServices.getALLTypeAsync();
         if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 400, resServices.message);
 		}
