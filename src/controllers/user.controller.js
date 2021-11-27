@@ -141,14 +141,14 @@ exports.changePasswordAsync = async (req, res, next) => {
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
-				resServices.success,
+				resServices.data,
 				400,
 				resServices.message
 			);
 		}
 		return controller.sendSuccess(
 			res,
-			resServices.success,
+			resServices.data,
 			200,
 			resServices.message
 		);
@@ -165,14 +165,14 @@ exports.changeInfoAsync = async (req, res, next) => {
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
-				resServices.success,
+				resServices.data,
 				400,
 				resServices.message
 			);
 		}
 		return controller.sendSuccess(
 			res,
-			resServices.success,
+			resServices.data,
 			200,
 			resServices.message
 		);

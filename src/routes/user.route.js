@@ -10,11 +10,11 @@ const { defaultRoles } = require('../config/defineModel');
 
 router.post('/login', Validate.body(SchemaValidateUser.login), Controller.loginAsync)
 router.post('/register', Validate.body(SchemaValidateUser.register), Controller.registerAsync)
-router.post('/changePassword', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.User]), Validate.body(SchemaValidateUser.changePass), Controller.changePasswordAsync)
+router.post('/changePassword', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.User, defaultRoles.Admin]), Validate.body(SchemaValidateUser.changePass), Controller.changePasswordAsync)
 router.get('/forgotPassword', Controller.forgotPasswordAsync)
 router.post('/resetPassword', Validate.body(SchemaValidateUser.resetPassword), Controller.resetPasswordAsync)
 router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)
-router.post('/changeInfo', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.User]), Validate.body(SchemaValidateUser.changeInfo), Controller.changeInfoAsync)
+router.post('/changeInfo', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.User, defaultRoles.Admin]), Validate.body(SchemaValidateUser.changeInfo), Controller.changeInfoAsync)
 router.post('/banUser', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.banUserAsync)
 router.post('/unbanUser', jwtServices.verify, verifyUserHelper.checkRole([defaultRoles.Admin]), Controller.unbanUserAsync)
 router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)

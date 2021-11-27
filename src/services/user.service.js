@@ -162,7 +162,8 @@ exports.changePasswordAsync = async (id, body) => {
 		await user.save();
 		return {
 			message: 'Đổi mật khẩu thành công!',
-			success: true
+			success: true,
+			data: user
 		};
 	} catch (error) {
 		console.log(error);
@@ -288,13 +289,15 @@ exports.changeInfoAsync = async (id, body) => {
 		if (user != null) {
 			return {
 			message: 'Đổi thông tin thành công!',
-			success: true
+			success: true,
+			data: user
 			};
 		}
 		else {
 			return {
 				message: "Đổi thông tin không thành công!",
-				success: false
+				success: false,
+				data: user
 			};
 		};
 	} catch (error) {
