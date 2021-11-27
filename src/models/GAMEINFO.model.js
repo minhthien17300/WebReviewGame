@@ -9,7 +9,8 @@ const GameSchema = mongoose.Schema({
   types: defaultModel.array,
   images: defaultModel.array,
   score: defaultModel.number,
-  review: defaultModel.stringEvaluate
+  review: defaultModel.stringEvaluate,
+  isDeleted: defaultModel.booleanFalse
 });
 
 const Game = module.exports = mongoose.model('GAMEINFO', GameSchema, 'GAMEINFO');

@@ -77,11 +77,23 @@ exports.editGameAsync = async ( body, images ) => {
 
 exports.deleteGameAsync = async (id) => {
     try {
-        const game = await GAME.deleteOne({ _id: id });
-		return {
-            message: "Xóa thành công!",
-            success: true,
-        }
+        const game = await GAME.findOneAndUpdate(
+			{ _id: id },
+			{ isDeleted: true },
+			{ new: true }
+		);
+		if (game != null) {
+			return {
+			message: 'Xóa thành công!',
+			success: true
+			};
+		}
+		else {
+			return {
+				message: "Xóa không thành công!",
+				success: false
+			};
+		};
     } catch (err) {
 		console.log(err);
 		return {
@@ -116,7 +128,7 @@ exports.findGameByTypeAsync = async types => {
 
 exports.getALLGameAsync = async () => {
     try {
-        const games = await GAME.find();
+        const games = await GAME.find({isDeleted: false});
         return games;
     } catch (err) {
 		console.log(err);
@@ -158,7 +170,7 @@ exports.findGameByNameAsync = async name => {
 
 exports.getGameSortAsync = async () => {
     try {
-        const games = await GAME.find().sort({score: -1});
+        const games = await GAME.find({isDeleted: false}).sort({score: -1});
         return games;
     } catch (err) {
 		console.log(err);
