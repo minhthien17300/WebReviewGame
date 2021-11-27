@@ -42,9 +42,9 @@ exports.editGameAsync = async ( body, images ) => {
     try {
         const { id, name, publisher, description, types } = body;
         const urlList = await uploadImageHelper.uploadImageAsync(images, name);
-        const tempGame = await GAME.findById({ _id: id });
+        /* const tempGame = await GAME.findById({ _id: id });
         let tempUrls = tempGame.images;
-        let urls = tempUrls.concat(urlList);
+        let urls = tempUrls.concat(urlList); */
         const game = await GAME.findOneAndUpdate(
 			{ _id: id },
 			{ 
@@ -52,7 +52,7 @@ exports.editGameAsync = async ( body, images ) => {
                 publisher: publisher,
 				description: description,
 				types: types,
-                images: urls
+                images: urlList
 			},
 			{ new: true }
 		);
