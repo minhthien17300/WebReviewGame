@@ -190,7 +190,7 @@ exports.fotgotPasswordAsync = async body => {
 				subject: 'Quên mật khẩu ReviewGame',
 				text:   'Có vẻ như bạn đã quên mật khẩu ReviewGame và muốn lấy lại\n'+
 						'Mã OTP của bạn là: ' + result.otp + '\n'+
-						'Nếu đó không phải là yêu cầu của bạn vui lòng bỏ qua eamil này!'
+						'Nếu đó không phải là yêu cầu của bạn vui lòng bỏ qua email này!'
 			};
 			const resultSendMail = await sendMail(mailOptions);
 			console.log(resultSendMail);
@@ -274,12 +274,12 @@ exports._findUserByRoleAsync = async () => {
 
 exports.changeInfoAsync = async (id, body) => {
 	try {
-		const { name, email, phone, gender, dateofBirth } = body;
+		const { name, phone, gender, dateofBirth } = body;
 		const user = await USER.findOneAndUpdate(
 			{ _id: id },
 			{ 
 				name: name,
-				email: email,
+				//email: email,
 				phone: phone,
 				gender: gender,
 				dateofBirth: dateofBirth
