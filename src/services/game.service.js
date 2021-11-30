@@ -149,7 +149,7 @@ exports.getGameDetailAsync = async (id) => {
 exports.findGameByNameAsync = async name => {
     try {
         var nameRegex = new RegExp(name)
-        const games = await GAME.find({name :{$regex: nameRegex, $options: 'i'}});
+        const games = await GAME.find({name :{$regex: nameRegex, $options: 'i'}, isDeleted: false});
         if(games.length == 0) {
             return {
                 message: "Không tìm thấy Game!",
